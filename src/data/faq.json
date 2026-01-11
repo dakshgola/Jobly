@@ -1,0 +1,26 @@
+[
+  {
+    "question": "What is JOBLY?",
+    "answer": "JOBLY is a modern recruitment platform designed to streamline job discovery and talent acquisition. It enables candidates to find relevant opportunities efficiently while helping employers hire the right talent through a structured and intuitive hiring workflow."
+  },
+  {
+    "question": "How can employers post a job on JOBLY?",
+    "answer": "Employers can post a job by signing in and navigating to the \"Post a Job\" section. Simply add role details, requirements, and company information to publish a listing instantly."
+  },
+  {
+    "question": "How do candidates find relevant jobs?",
+    "answer": "Candidates can explore opportunities using smart filters such as role, location, and keywords. JOBLY helps surface relevant positions to simplify the job discovery process."
+  },
+  {
+    "question": "How does the job application process work?",
+    "answer": "Candidates can apply directly through JOBLY by submitting their profile and resume. Applications are securely shared with employers for review and further action."
+  },
+  {
+    "question": "Can candidates save jobs for later?",
+    "answer": "Yes. JOBLY allows candidates to bookmark roles and revisit them later from the \"Saved Jobs\" section for a more organized job search experience."
+  },
+  {
+    "question": "How can candidates track their applications?",
+    "answer": "Candidates can monitor the status of their applications in real time through the \"My Applications\" dashboard, providing transparency throughout the hiring process."
+  }
+]
