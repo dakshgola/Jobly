@@ -31,30 +31,35 @@ const Header = () => {
 
   return (
     <>
-      <nav className="py-4 flex justify-between items-center">
-        <Link to="/">
-          <img src="/logo.png" className="h-20" alt="Hirrd Logo" />
+      <nav className="py-4 sm:py-6 flex justify-between items-center glass-card px-4 sm:px-6 rounded-xl sm:rounded-2xl mb-6 sm:mb-8">
+        <Link to="/" className="transition-transform hover:scale-105">
+          <img src="/logo.png" className="h-12 sm:h-16" alt="Jobly Logo" />
         </Link>
 
-        <div className="flex gap-8">
+        <div className="flex gap-3 sm:gap-4 items-center">
           <SignedOut>
-            <Button variant="outline" onClick={() => setShowSignIn(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowSignIn(true)}
+              className="glass text-white border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-sm sm:text-base px-4 sm:px-6 py-2"
+            >
               Login
             </Button>
           </SignedOut>
           <SignedIn>
             {user?.unsafeMetadata?.role === "recruiter" && (
               <Link to="/post-job">
-                <Button variant="destructive" className="rounded-full">
-                  <PenBox size={20} className="mr-2" />
-                  Post a Job
+                <Button className="gradient-button text-white rounded-xl px-4 sm:px-6 text-sm sm:text-base py-2">
+                  <PenBox size={16} className="mr-2 sm:inline hidden" />
+                  <span className="hidden sm:inline">Post a Job</span>
+                  <span className="sm:hidden">Post</span>
                 </Button>
               </Link>
             )}
             <UserButton
               appearance={{
                 elements: {
-                  avatarBox: "w-10 h-10",
+                  avatarBox: "w-9 h-9 sm:w-10 sm:h-10 ring-2 ring-purple-500/30",
                 },
               }}
             >
@@ -78,7 +83,8 @@ const Header = () => {
 
       {showSignIn && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          style={{ zIndex: 999999 }}
           onClick={handleOverlayClick}
         >
           <SignIn

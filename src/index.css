@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ===============================
-   DESIGN TOKENS (SHADCN STYLE)
+   DESIGN TOKENS (MODERN SAAS)
    =============================== */
 @layer base {
   :root {
@@ -70,86 +70,384 @@
 }
 
 /* ===============================
-   GLOBAL RESET + BODY BACKGROUND
+   MODERN GRADIENT BACKGROUND
    =============================== */
 @layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
   body {
-  color: hsl(var(--foreground));
-  font-family: theme(fontFamily.display);
+    color: hsl(var(--foreground));
+    font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+    background: #0a0118;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-  background:
-    /* CENTER GLOW */
-    radial-gradient(
-      800px 500px at 50% 30%,
-      rgba(99, 102, 241, 0.45),
-      transparent 60%
-    ),
+  /* Modern animated mesh gradient background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    
+    background:
+      /* Primary gradient orb - top left */
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(139, 92, 246, 0.15) 0%,
+        transparent 50%
+      ),
+      
+      /* Secondary gradient orb - top right */
+      radial-gradient(
+        circle at 80% 10%,
+        rgba(59, 130, 246, 0.12) 0%,
+        transparent 50%
+      ),
+      
+      /* Accent gradient orb - center */
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(168, 85, 247, 0.08) 0%,
+        transparent 60%
+      ),
+      
+      /* Bottom accent */
+      radial-gradient(
+        circle at 70% 90%,
+        rgba(236, 72, 153, 0.1) 0%,
+        transparent 50%
+      ),
+      
+      /* Base gradient */
+      linear-gradient(
+        135deg,
+        #0a0118 0%,
+        #1a0b2e 50%,
+        #0a0118 100%
+      );
+    
+    animation: gradientShift 20s ease infinite;
+  }
 
-    /* RIGHT DEPTH */
-    radial-gradient(
-      600px 400px at 80% 40%,
-      rgba(168, 85, 247, 0.35),
-      transparent 65%
-    ),
+  /* Subtle grain texture overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+  }
 
-    /* HEAVY VIGNETTE */
-    radial-gradient(
-      1200px 900px at 50% 50%,
-      rgba(0, 0, 0, 0.85),
-      transparent 70%
-    ),
+  @keyframes gradientShift {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
 
-    linear-gradient(180deg, #020617 0%, #030712 100%);
-
-  -webkit-font-smoothing: antialiased;
+  /* Force all normal content to stay below modals */
+  #root,
+  #root > div,
+  main,
+  header,
+  nav,
+  section,
+  div,
+  h1,
+  h2,
+  h3,
+  p,
+  button:not([data-clerk-element]),
+  a:not([data-clerk-element]),
+  img {
+    position: relative;
+    z-index: 1;
+  }
 }
-
-}
-
 
 /* ===============================
-   PREMIUM SAAS UTILITIES
+   CLERK MODAL - MAXIMUM PRIORITY
+   =============================== */
+
+/* Outermost Clerk portal container */
+body > div:has([data-clerk-modal]),
+body > div:has(.cl-modal),
+body > div:has(.cl-internal-b3fm6y),
+#clerk-components,
+.__clerk,
+[data-clerk-portal] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+  isolation: isolate !important;
+}
+
+/* Backdrop */
+.cl-modalBackdrop,
+.cl-internal-1ujxbpm {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  z-index: 999998 !important;
+  pointer-events: auto !important;
+  isolation: isolate !important;
+}
+
+/* Modal wrapper */
+.cl-internal-b3fm6y,
+[data-clerk-modal] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  isolation: isolate !important;
+}
+
+/* Modal card */
+.cl-modal,
+.cl-modalContent,
+.cl-rootBox,
+.cl-card {
+  position: relative !important;
+  z-index: 999999 !important;
+  pointer-events: auto !important;
+  box-shadow: 0 25px 75px rgba(0, 0, 0, 0.6) !important;
+  isolation: isolate !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+/* All interactive Clerk elements */
+.cl-formButtonPrimary,
+.cl-socialButtonsBlockButton,
+.cl-formFieldInput,
+.cl-footerAction,
+.cl-footerActionLink,
+.cl-headerTitle,
+.cl-headerSubtitle,
+.cl-socialButtonsIconButton,
+.cl-dividerRow,
+.cl-form,
+.cl-formField,
+.cl-formFieldLabel,
+.cl-identityPreview,
+button[data-clerk-element],
+input[data-clerk-element],
+a[data-clerk-element],
+div[data-clerk-element] {
+  position: relative !important;
+  z-index: 999999 !important;
+}
+
+/* Radix UI Portal */
+[data-radix-portal] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  isolation: isolate !important;
+}
+
+/* Generic dialog elements */
+[role="dialog"],
+[role="alertdialog"] {
+  z-index: 999999 !important;
+  isolation: isolate !important;
+}
+
+/* ===============================
+   PREMIUM SAAS COMPONENTS
+   =============================== */
+@layer components {
+  /* Modern glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(139, 92, 246, 0.2);
+    box-shadow: 
+      0 12px 40px rgba(139, 92, 246, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Gradient button */
+  .gradient-button {
+    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    box-shadow: 
+      0 4px 16px rgba(139, 92, 246, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 0;
+  }
+
+  .gradient-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.08);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .gradient-button:hover::before {
+    opacity: 1;
+  }
+
+  .gradient-button:hover {
+    box-shadow: 
+      0 6px 20px rgba(139, 92, 246, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .gradient-button * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ===============================
+   MODERN UTILITIES
    =============================== */
 @layer utilities {
-  /* Gradient text (used sparingly) */
+  /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400
-           text-transparent bg-clip-text;
+    background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  /* Glass card base */
+  /* Animated gradient text */
+  .gradient-text-animated {
+    background: linear-gradient(
+      90deg,
+      #a78bfa 0%,
+      #ec4899 25%,
+      #f59e0b 50%,
+      #ec4899 75%,
+      #a78bfa 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 8s linear infinite;
+  }
+
+  @keyframes gradientFlow {
+    0% {
+      background-position: 0% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  /* Glass effect */
   .glass {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Soft shadow for cards */
+  /* Glow effect - reduced */
+  .glow {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+  }
+
+  /* Soft shadow */
   .shadow-soft {
     box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.35),
+      0 10px 30px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
+  /* Hero fade animation */
   .hero-fade {
-    animation: heroFade 0.8s ease-out forwards;
+    animation: heroFade 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   @keyframes heroFade {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(24px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
+  /* Stagger children animation */
+  .stagger-fade > * {
+    animation: heroFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+  }
+
+  .stagger-fade > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-fade > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-fade > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-fade > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-fade > *:nth-child(5) { animation-delay: 0.5s; }
+
+  /* Shimmer effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 /* ===============================
-   MARKDOWN FIX (OPTIONAL)
+   MARKDOWN FIX
    =============================== */
 .wmde-markdown ul {
   list-style-type: disc;
