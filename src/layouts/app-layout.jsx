@@ -3,17 +3,24 @@ import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
   return (
-    <div>
-      <div className="app-background"></div>
-
-      <main className="min-h-screen container">
-        <Header />
-        <Outlet />
+    <div className="w-full overflow-x-hidden">
+      
+      {/* Main page */}
+      <main className="min-h-screen w-full">
+        {/* CONTAINER — THIS IS THE KEY */}
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-10">
+          <Header />
+          <Outlet />
+        </div>
       </main>
 
-      <div className="p-10 text-center text-sm text-gray-400 border-t border-white/5">
-        Built with modern web technologies
-      </div>
+      {/* Footer */}
+      <footer className="border-t border-white/5">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-8 lg:px-10 py-10 text-center text-sm text-gray-400">
+          Built with modern web technologies
+        </div>
+      </footer>
+
     </div>
   );
 };
