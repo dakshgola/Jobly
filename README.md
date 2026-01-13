@@ -1,16 +1,48 @@
-# React + Vite
+# 🚀 Jobly — Modern Job Portal SaaS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Jobly is a **modern SaaS-based job portal web application** designed to simplify job discovery for candidates and hiring for employers.  
+It features a **premium dark UI**, smooth animations, and secure authentication.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+### 👩‍💼 For Job Seekers
+- Browse and search job listings
+- View detailed job descriptions
+- Apply to jobs seamlessly
+- Clean and distraction-free UI
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🏢 For Employers
+- Post new job openings
+- Manage job listings
+- Reach relevant candidates faster
 
-## Expanding the ESLint configuration
+### 🔐 Authentication
+- Secure authentication using **Clerk**
+- Google OAuth support
+- Protected routes for users
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🎨 UI / UX
+- Premium **SaaS-style dark theme**
+- Gradient background with vignette
+- Smooth hero animations
+- Fully responsive design
+- Modern typography and spacing
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- **React (Vite)**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **React Router**
+- **Embla Carousel**
+
+### Backend / Services
+- **Supabase** (Database & APIs)
+- **Clerk** (Authentication)
+
+---
