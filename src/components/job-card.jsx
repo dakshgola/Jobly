@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Heart, MapPinIcon, Trash2Icon } from "lucide-react";
+import { Heart, MapPinIcon, Trash2Icon, Briefcase } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -53,50 +53,69 @@ const JobCard = ({
   }, [savedJob]);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="glass-card flex flex-col hover:scale-[1.02] transition-all duration-300 border-0 overflow-hidden group">
       {loadingDeleteJob && (
-        <BarLoader className="mt-4" width={"100%"} color="#36d7b7" />
+        <BarLoader className="mt-4" width={"100%"} color="#8b5cf6" />
       )}
-      <CardHeader className="flex">
-        <CardTitle className="flex justify-between font-bold">
-          {job.title}
+      
+      <CardHeader className="pb-4">
+        <CardTitle className="flex justify-between items-start font-bold text-white text-xl">
+          <span className="flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-purple-400" />
+            {job.title}
+          </span>
           {isMyJob && (
             <Trash2Icon
-              fill="red"
               size={18}
-              className="text-red-300 cursor-pointer"
+              className="text-red-400 hover:text-red-500 cursor-pointer transition-colors"
               onClick={handleDeleteJob}
             />
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
-        <div className="flex justify-between">
-          {job.company && <img src={job.company.logo_url} className="h-6" />}
-          <div className="flex gap-2 items-center">
-            <MapPinIcon size={15} /> {job.location}
+
+      <CardContent className="flex flex-col gap-4 flex-1 text-gray-300">
+        <div className="flex justify-between items-center">
+          {job.company && (
+            <img 
+              src={job.company.logo_url} 
+              alt={job.company.name}
+              className="h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" 
+            />
+          )}
+          <div className="flex gap-2 items-center text-sm text-gray-400">
+            <MapPinIcon size={14} className="text-purple-400" /> 
+            {job.location}
           </div>
         </div>
-        <hr />
-        {job.description.substring(0, job.description.indexOf("."))}.
+        
+        <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+        
+        <p className="text-sm text-gray-400 line-clamp-2">
+          {job.description.substring(0, job.description.indexOf("."))}.
+        </p>
       </CardContent>
-      <CardFooter className="flex gap-2">
+
+      <CardFooter className="flex gap-2 pt-4">
         <Link to={`/job/${job.id}`} className="flex-1">
-          <Button variant="secondary" className="w-full">
-            More Details
+          <Button 
+            className="w-full glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white font-semibold rounded-xl"
+            variant="outline"
+          >
+            View Details
           </Button>
         </Link>
         {!isMyJob && (
           <Button
             variant="outline"
-            className="w-15"
+            className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 w-12 h-10 p-0 rounded-xl"
             onClick={handleSaveJob}
             disabled={loadingSavedJob}
           >
             {saved ? (
-              <Heart size={20} fill="red" stroke="red" />
+              <Heart size={18} fill="#ec4899" stroke="#ec4899" />
             ) : (
-              <Heart size={20} />
+              <Heart size={18} className="text-gray-400" />
             )}
           </Button>
         )}

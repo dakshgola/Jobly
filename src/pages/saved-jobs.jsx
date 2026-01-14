@@ -4,6 +4,7 @@ import useFetch from "@/hooks/use-fetch";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import { BarLoader } from "react-spinners";
+import { Heart } from "lucide-react";
 
 const SavedJobs = () => {
   const { isLoaded } = useUser();
@@ -22,17 +23,27 @@ const SavedJobs = () => {
   }, [isLoaded]);
 
   if (!isLoaded || loadingSavedJobs) {
-    return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
+    return <BarLoader className="mb-4" width={"100%"} color="#8b5cf6" />;
   }
 
   return (
-    <div>
-      <h1 className="gradient-title font-extrabold text-6xl sm:text-7xl text-center pb-8">
-        Saved Jobs
-      </h1>
+    <div className="pb-10">
+      {/* Hero Title */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-3 mb-4">
+          <Heart className="w-10 h-10 text-pink-400" fill="#ec4899" />
+        </div>
+        <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-white">
+          Saved <span className="gradient-text-animated">Jobs</span>
+        </h1>
+        <p className="text-gray-400 mt-4 text-sm sm:text-base">
+          Your bookmarked opportunities for future reference
+        </p>
+      </div>
 
+      {/* Job Cards Grid */}
       {loadingSavedJobs === false && (
-        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {savedJobs?.length ? (
             savedJobs?.map((saved) => {
               return (
@@ -45,7 +56,15 @@ const SavedJobs = () => {
               );
             })
           ) : (
-            <div>No Saved Jobs</div>
+            <div className="col-span-full text-center py-20">
+              <div className="glass-card p-12 rounded-2xl inline-block">
+                <Heart className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-400 text-lg">No Saved Jobs Yet</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  Start saving jobs you're interested in!
+                </p>
+              </div>
+            </div>
           )}
         </div>
       )}

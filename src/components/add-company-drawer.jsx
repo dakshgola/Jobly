@@ -1,22 +1,23 @@
-/* eslint-disable react/prop-types */
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
 import useFetch from "@/hooks/use-fetch";
 import { addNewCompany } from "@/api/apiCompanies";
 import { BarLoader } from "react-spinners";
 import { useEffect } from "react";
+import { Building2, Plus } from "lucide-react";
 
 const schema = z.object({
   name: z.string().min(1, { message: "Company name is required" }),
@@ -25,10 +26,10 @@ const schema = z.object({
     .refine(
       (file) =>
         file[0] &&
-        (file[0].type === "image/png" || file[0].type === "image/jpeg"),
-      {
-        message: "Only Images are allowed",
-      }
+        (file[0].type === "image/png" ||
+          file[0].type === "image/jpeg" ||
+          file[0].type === "image/jpg"),
+      { message: "Only Images are allowed" }
     ),
 });
 
@@ -37,6 +38,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: zodResolver(schema),
   });
@@ -58,55 +60,103 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
   useEffect(() => {
     if (dataAddCompany?.length > 0) {
       fetchCompanies();
+      reset();
     }
   }, [loadingAddCompany]);
 
   return (
     <Drawer>
-      <DrawerTrigger>
-        <Button type="button" size="sm" variant="secondary">
+      <DrawerTrigger asChild>
+        <Button 
+          type="button" 
+          size="sm" 
+          variant="outline"
+          className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white"
+        >
+          <Plus className="w-4 h-4 mr-1" />
           Add Company
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="bg-[#0a0118] border-purple-500/30">
         <DrawerHeader>
-          <DrawerTitle>Add a New Company</DrawerTitle>
+          <DrawerTitle className="text-white flex items-center gap-2 text-2xl">
+            <Building2 className="w-6 h-6 text-purple-400" />
+            Add a New Company
+          </DrawerTitle>
+          <DrawerDescription className="text-gray-400">
+            Add a new company to the platform
+          </DrawerDescription>
         </DrawerHeader>
-        <form className="flex gap-2 p-4 pb-0">
+
+        <form className="flex gap-4 p-4 pb-0 flex-col">
           {/* Company Name */}
-          <Input placeholder="Company name" {...register("name")} />
+          <div>
+            <label className="text-white text-sm font-semibold mb-2 block">
+              Company Name
+            </label>
+            <Input
+              placeholder="e.g. Netflix"
+              {...register("name")}
+              className="glass-card border-purple-500/30 text-white placeholder:text-gray-500 h-12"
+            />
+            {errors.name && (
+              <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
+                <span>⚠</span> {errors.name.message}
+              </p>
+            )}
+          </div>
 
           {/* Company Logo */}
-          <Input
-            type="file"
-            accept="image/*"
-            className=" file:text-gray-500"
-            {...register("logo")}
-          />
+          <div>
+            <label className="text-white text-sm font-semibold mb-2 block">
+              Company Logo
+            </label>
+            <Input
+              type="file"
+              accept="image/*"
+              {...register("logo")}
+              className="glass-card border-purple-500/30 text-white file:text-white file:bg-purple-500/20 file:border-0 file:mr-4 file:py-2 file:px-4 file:rounded-lg h-12"
+            />
+            {errors.logo && (
+              <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
+                <span>⚠</span> {errors.logo.message}
+              </p>
+            )}
+          </div>
 
-          {/* Add Button */}
-          <Button
-            type="button"
-            onClick={handleSubmit(onSubmit)}
-            variant="destructive"
-            className="w-40"
-          >
-            Add
-          </Button>
-        </form>
-        <DrawerFooter>
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-          {errors.logo && <p className="text-red-500">{errors.logo.message}</p>}
+          {/* Error Message */}
           {errorAddCompany?.message && (
-            <p className="text-red-500">{errorAddCompany?.message}</p>
+            <div className="glass-card border-red-500/30 bg-red-500/10 p-4 rounded-xl">
+              <p className="text-red-400 text-sm flex items-center gap-2">
+                <span>⚠</span> {errorAddCompany?.message}
+              </p>
+            </div>
           )}
-          {loadingAddCompany && <BarLoader width={"100%"} color="#36d7b7" />}
-          <DrawerClose asChild>
-            <Button type="button" variant="secondary">
-              Cancel
+
+          {/* Loading State */}
+          {loadingAddCompany && <BarLoader width={"100%"} color="#8b5cf6" />}
+
+          <DrawerFooter className="px-0">
+            <Button
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+              className="gradient-button h-12 text-base font-semibold rounded-xl"
+              disabled={loadingAddCompany}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {loadingAddCompany ? "Adding..." : "Add Company"}
             </Button>
-          </DrawerClose>
-        </DrawerFooter>
+            <DrawerClose asChild>
+              <Button 
+                type="button" 
+                variant="outline"
+                className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white h-12 rounded-xl"
+              >
+                Cancel
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </form>
       </DrawerContent>
     </Drawer>
   );

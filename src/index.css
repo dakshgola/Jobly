@@ -454,3 +454,128 @@ div[data-clerk-element] {
   padding-left: 1.5rem;
   color: white;
 }
+
+/* ===============================
+   MDEDITOR CUSTOM STYLING
+   =============================== */
+
+/* Dark mode for MDEditor */
+[data-color-mode="dark"] .w-md-editor {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2) !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar button {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-toolbar button:hover {
+  color: white !important;
+  background-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-content {
+  background-color: transparent !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-text,
+[data-color-mode="dark"] .w-md-editor-text-pre,
+[data-color-mode="dark"] .w-md-editor-text-input {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+
+[data-color-mode="dark"] .w-md-editor-preview {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: white !important;
+}
+
+/* Fix fullscreen mode z-index */
+.w-md-editor-fullscreen {
+  z-index: 999999 !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background-color: #0a0118 !important;
+}
+
+.w-md-editor-fullscreen .w-md-editor-toolbar {
+  background-color: rgba(26, 11, 46, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.w-md-editor-fullscreen .w-md-editor-content {
+  background-color: #0a0118 !important;
+}
+
+.w-md-editor-fullscreen .w-md-editor-text,
+.w-md-editor-fullscreen .w-md-editor-text-pre,
+.w-md-editor-fullscreen .w-md-editor-text-input,
+.w-md-editor-fullscreen .w-md-editor-preview {
+  background-color: rgba(26, 11, 46, 0.5) !important;
+}
+
+/* Scrollbar styling for editor */
+.w-md-editor-text::-webkit-scrollbar,
+.w-md-editor-preview::-webkit-scrollbar {
+  width: 8px;
+}
+
+.w-md-editor-text::-webkit-scrollbar-track,
+.w-md-editor-preview::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.w-md-editor-text::-webkit-scrollbar-thumb,
+.w-md-editor-preview::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+}
+
+.w-md-editor-text::-webkit-scrollbar-thumb:hover,
+.w-md-editor-preview::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
+}
+
+/* Code blocks in preview */
+[data-color-mode="dark"] .wmde-markdown code {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  color: #a78bfa !important;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+[data-color-mode="dark"] .wmde-markdown pre {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+[data-color-mode="dark"] .wmde-markdown pre code {
+  background-color: transparent !important;
+  padding: 0;
+}
+
+/* Headings in preview */
+[data-color-mode="dark"] .wmde-markdown h1,
+[data-color-mode="dark"] .wmde-markdown h2,
+[data-color-mode="dark"] .wmde-markdown h3,
+[data-color-mode="dark"] .wmde-markdown h4 {
+  color: white !important;
+  border-bottom-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Links in preview */
+[data-color-mode="dark"] .wmde-markdown a {
+  color: #a78bfa !important;
+}
+
+[data-color-mode="dark"] .wmde-markdown a:hover {
+  color: #c4b5fd !important;
+}
