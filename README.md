@@ -1,48 +1,77 @@
-# 🚀 Jobly — Modern Job Portal SaaS
+# Jobly — Job Portal Web Application
 
-Jobly is a **modern SaaS-based job portal web application** designed to simplify job discovery for candidates and hiring for employers.  
-It features a **premium dark UI**, smooth animations, and secure authentication.
+Jobly is a modern job portal web application built to support job discovery for candidates and hiring workflows for recruiters.  
+The project focuses on clean UI, role-based access, and real-world job portal functionality using a SaaS-style frontend.
 
 ---
 
-## ✨ Features
+## Features
 
-### 👩‍💼 For Job Seekers
-- Browse and search job listings
+### Candidate
+- Browse available job listings
+- Search jobs by title
+- Filter jobs by location and company
 - View detailed job descriptions
-- Apply to jobs seamlessly
-- Clean and distraction-free UI
+- Apply to jobs
+- Save jobs for later
 
-### 🏢 For Employers
+### Recruiter
 - Post new job openings
-- Manage job listings
-- Reach relevant candidates faster
+- Manage posted jobs
+- Control job hiring status (Open / Closed)
+- View applications for each job
+- Add and manage companies
 
-### 🔐 Authentication
-- Secure authentication using **Clerk**
+### Authentication & Access Control
+- User authentication using Clerk
 - Google OAuth support
-- Protected routes for users
-
-### 🎨 UI / UX
-- Premium **SaaS-style dark theme**
-- Gradient background with vignette
-- Smooth hero animations
-- Fully responsive design
-- Modern typography and spacing
+- Role-based routing (Candidate / Recruiter)
+- Protected routes for authenticated users
 
 ---
 
-## 🛠 Tech Stack
+## UI / UX
+- Dark SaaS-style interface
+- Gradient-based layout
+- Responsive design (mobile-first)
+- Reusable component system
+- Clean typography and spacing
+- Smooth hover and transition effects
+
+---
+
+## Tech Stack
 
 ### Frontend
-- **React (Vite)**
-- **Tailwind CSS**
-- **Shadcn UI**
-- **React Router**
-- **Embla Carousel**
+- React (Vite)
+- Tailwind CSS
+- Shadcn UI
+- React Router
+- Lucide Icons
 
 ### Backend / Services
-- **Supabase** (Database & APIs)
-- **Clerk** (Authentication)
+- Supabase (Database & APIs)
+- Clerk (Authentication)
 
 ---
+
+## Project Architecture
+- Component-based UI structure
+- Centralized Supabase client
+- Custom hooks for data fetching
+- Separation of pages, components, and services
+- Role-based application flow
+
+---
+
+## Scalable Features (Can Be Added)
+
+- Advanced job recommendation system
+- Recruiter analytics dashboard
+- Email notifications for applications
+- Job application status tracking
+- Admin panel for platform moderation
+- Pagination & infinite scrolling
+- Saved searches & alerts
+- Multi-role permissions
+- Company profile pages
