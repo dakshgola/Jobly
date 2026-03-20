@@ -18,12 +18,13 @@ import { useUser } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MDEditor from "@uiw/react-md-editor";
 import { State } from "country-state-city";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import { z } from "zod";
-import { Briefcase, MapPin, Building2, FileText, Send } from "lucide-react";
+import { Briefcase, MapPin, Building2, FileText, Send, Sparkles } from "lucide-react";
+import { enhanceJobDescription } from "@/services/aiEnhanceJob";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -41,11 +42,30 @@ const PostJob = () => {
     register,
     handleSubmit,
     control,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: { location: "", company_id: "", requirements: "" },
     resolver: zodResolver(schema),
   });
+
+  const [isEnhancing, setIsEnhancing] = useState(false);
+
+  const handleEnhance = async () => {
+    const currentReqs = getValues("requirements");
+    if (!currentReqs) return;
+    
+    setIsEnhancing(true);
+    try {
+      const enhanced = await enhanceJobDescription(currentReqs);
+      setValue("requirements", enhanced, { shouldValidate: true });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
 
   const {
     loading: loadingCreateJob,
@@ -80,7 +100,13 @@ const PostJob = () => {
   }, [isLoaded]);
 
   if (!isLoaded || loadingCompanies) {
-    return <BarLoader className="mb-4" width={"100%"} color="#8b5cf6" />;
+    return (
+      <div className="pb-10 max-w-4xl mx-auto flex flex-col gap-6 animate-pulse">
+        <div className="h-16 w-1/3 bg-gray-800/50 rounded-xl mx-auto mb-10" />
+        <div className="h-12 w-full bg-gray-800/50 rounded-xl" />
+        <div className="h-32 w-full bg-gray-800/50 rounded-xl" />
+      </div>
+    );
   }
 
   if (user?.unsafeMetadata?.role !== "recruiter") {
@@ -103,13 +129,13 @@ const PostJob = () => {
           {/* Job Title */}
           <div>
             <label className="text-white text-sm font-semibold mb-2 flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-purple-400" />
+              <Briefcase className="w-4 h-4 text-[var(--accent-primary)]" />
               Job Title
             </label>
             <Input 
               placeholder="e.g. Senior Frontend Developer" 
               {...register("title")}
-              className="glass-card border-purple-500/20 focus:border-purple-500/40 text-white placeholder:text-gray-500 h-12"
+              className="glass-card border-[var(--border-color)] focus:border-blue-500/40 text-white placeholder:text-gray-500 h-12"
             />
             {errors.title && (
               <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
@@ -121,13 +147,13 @@ const PostJob = () => {
           {/* Job Description */}
           <div>
             <label className="text-white text-sm font-semibold mb-2 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-purple-400" />
+              <FileText className="w-4 h-4 text-[var(--accent-primary)]" />
               Job Description
             </label>
             <Textarea 
               placeholder="Describe the role, responsibilities, and what you're looking for..."
               {...register("description")}
-              className="glass-card border-purple-500/20 focus:border-purple-500/40 text-white placeholder:text-gray-500 min-h-32 resize-none"
+              className="glass-card border-[var(--border-color)] focus:border-blue-500/40 text-white placeholder:text-gray-500 min-h-32 resize-none"
             />
             {errors.description && (
               <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
@@ -140,7 +166,7 @@ const PostJob = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label className="text-white text-sm font-semibold mb-2 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-purple-400" />
+                <MapPin className="w-4 h-4 text-[var(--accent-primary)]" />
                 Location
               </label>
               <Controller
@@ -148,16 +174,16 @@ const PostJob = () => {
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="glass-card border-purple-500/20 focus:border-purple-500/40 text-white h-12">
+                    <SelectTrigger className="glass-card border-[var(--border-color)] focus:border-blue-500/40 text-white h-12">
                       <SelectValue placeholder="Select Location" />
                     </SelectTrigger>
-                    <SelectContent className="glass-card border-purple-500/30 bg-[#1a0b2e]">
+                    <SelectContent className="glass-card border-[var(--border-color)] bg-[#1a0b2e]">
                       <SelectGroup>
                         {State.getStatesOfCountry("IN").map(({ name }) => (
                           <SelectItem 
                             key={name} 
                             value={name}
-                            className="text-white hover:bg-purple-500/20 focus:bg-purple-500/20"
+                            className="text-white hover:bg-blue-500/20 focus:bg-blue-500/20"
                           >
                             {name}
                           </SelectItem>
@@ -176,7 +202,7 @@ const PostJob = () => {
 
             <div>
               <label className="text-white text-sm font-semibold mb-2 flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-purple-400" />
+                <Building2 className="w-4 h-4 text-[var(--accent-primary)]" />
                 Company
               </label>
               <div className="flex gap-2">
@@ -185,7 +211,7 @@ const PostJob = () => {
                   control={control}
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="glass-card border-purple-500/20 focus:border-purple-500/40 text-white h-12 flex-1">
+                      <SelectTrigger className="glass-card border-[var(--border-color)] focus:border-blue-500/40 text-white h-12 flex-1">
                         <SelectValue placeholder="Select Company">
                           {field.value
                             ? companies?.find((com) => com.id === Number(field.value))
@@ -193,13 +219,13 @@ const PostJob = () => {
                             : "Select Company"}
                         </SelectValue>
                       </SelectTrigger>
-                      <SelectContent className="glass-card border-purple-500/30 bg-[#1a0b2e]">
+                      <SelectContent className="glass-card border-[var(--border-color)] bg-[#1a0b2e]">
                         <SelectGroup>
                           {companies?.map(({ name, id }) => (
                             <SelectItem 
                               key={name} 
                               value={id}
-                              className="text-white hover:bg-purple-500/20 focus:bg-purple-500/20"
+                              className="text-white hover:bg-blue-500/20 focus:bg-blue-500/20"
                             >
                               {name}
                             </SelectItem>
@@ -221,11 +247,34 @@ const PostJob = () => {
 
           {/* Requirements Editor */}
 
-<div>
-  <label className="text-white text-sm font-semibold mb-2 block">
-    Requirements (Markdown Supported)
-  </label>
-  <div className="rounded-xl overflow-hidden border border-purple-500/20" data-color-mode="dark">
+{/* Requirements Editor */}
+
+<div className="flex flex-col gap-2">
+  <div className="flex items-center justify-between mb-1">
+    <label className="text-white text-sm font-semibold block">
+      Requirements (Markdown Supported)
+    </label>
+    <Button
+      type="button"
+      variant="ghost"
+      size="sm"
+      onClick={handleEnhance}
+      disabled={isEnhancing || !control._formValues.requirements}
+      className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 h-8 px-3 text-xs border border-blue-500/20"
+    >
+      {isEnhancing ? (
+        <span className="flex items-center gap-2">
+          <div className="animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
+          Enhancing...
+        </span>
+      ) : (
+        <span className="flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5" /> Enhance with AI
+        </span>
+      )}
+    </Button>
+  </div>
+  <div className="rounded-xl overflow-hidden border border-[var(--border-color)] group focus-within:border-blue-500/40 transition-colors" data-color-mode="dark">
     <Controller
       name="requirements"
       control={control}
@@ -248,7 +297,7 @@ const PostJob = () => {
     />
   </div>
   {errors.requirements && (
-    <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
+    <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
       <span className="text-red-400">⚠</span> {errors.requirements.message}
     </p>
   )}
@@ -263,15 +312,10 @@ const PostJob = () => {
             </div>
           )}
 
-          {/* Loading State */}
-          {loadingCreateJob && (
-            <BarLoader width={"100%"} color="#8b5cf6" />
-          )}
-
           {/* Submit Button */}
           <Button 
             type="submit" 
-            className="gradient-button h-14 text-lg font-semibold rounded-xl"
+            className="bg-blue-600 hover:bg-blue-700 text-white h-14 text-lg font-semibold rounded-xl shadow-sm transition-transform hover:scale-[1.02] border-0"
             disabled={loadingCreateJob}
           >
             <Send className="w-5 h-5 mr-2" />

@@ -71,16 +71,16 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
           type="button" 
           size="sm" 
           variant="outline"
-          className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white"
+          className="glass-card border-[var(--border-color)] hover:border-blue-500/50 hover:bg-blue-500/10 text-white"
         >
           <Plus className="w-4 h-4 mr-1" />
           Add Company
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="bg-[#0a0118] border-purple-500/30">
+      <DrawerContent className="bg-[#0a0118] border-[var(--border-color)]">
         <DrawerHeader>
           <DrawerTitle className="text-white flex items-center gap-2 text-2xl">
-            <Building2 className="w-6 h-6 text-purple-400" />
+            <Building2 className="w-6 h-6 text-[var(--accent-primary)]" />
             Add a New Company
           </DrawerTitle>
           <DrawerDescription className="text-gray-400">
@@ -97,7 +97,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
             <Input
               placeholder="e.g. Netflix"
               {...register("name")}
-              className="glass-card border-purple-500/30 text-white placeholder:text-gray-500 h-12"
+              className="glass-card border-[var(--border-color)] text-white placeholder:text-gray-500 h-12"
             />
             {errors.name && (
               <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
@@ -115,7 +115,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
               type="file"
               accept="image/*"
               {...register("logo")}
-              className="glass-card border-purple-500/30 text-white file:text-white file:bg-purple-500/20 file:border-0 file:mr-4 file:py-2 file:px-4 file:rounded-lg h-12"
+              className="glass-card border-[var(--border-color)] text-white file:text-white file:bg-blue-500/20 file:border-0 file:mr-4 file:py-2 file:px-4 file:rounded-lg h-12"
             />
             {errors.logo && (
               <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
@@ -150,7 +150,7 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
               <Button 
                 type="button" 
                 variant="outline"
-                className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white h-12 rounded-xl"
+                className="glass-card border-[var(--border-color)] hover:border-blue-500/50 hover:bg-blue-500/10 text-white h-12 rounded-xl"
               >
                 Cancel
               </Button>

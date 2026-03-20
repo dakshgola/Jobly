@@ -1,77 +1,79 @@
-# Jobly — Job Portal Web Application
+# Jobly — Job Portal with AI Features
 
-Jobly is a modern job portal web application built to support job discovery for candidates and hiring workflows for recruiters.  
-The project focuses on clean UI, role-based access, and real-world job portal functionality using a SaaS-style frontend.
+## Overview
+A job portal web application that allows candidates to find jobs and recruiters to post and manage listings.
+Includes AI-based features like job matching and resume feedback.
 
 ---
 
 ## Features
 
 ### Candidate
-- Browse available job listings
-- Search jobs by title
-- Filter jobs by location and company
-- View detailed job descriptions
-- Apply to jobs
-- Save jobs for later
+* Browse jobs
+* Search and filter jobs
+* View job details
+* Apply to jobs
+* Save jobs
+* AI match score (job vs profile)
+* AI resume feedback
 
 ### Recruiter
-- Post new job openings
-- Manage posted jobs
-- Control job hiring status (Open / Closed)
-- View applications for each job
-- Add and manage companies
-
-### Authentication & Access Control
-- User authentication using Clerk
-- Google OAuth support
-- Role-based routing (Candidate / Recruiter)
-- Protected routes for authenticated users
+* Post jobs
+* Manage job listings
+* View applicants
+* Improve job descriptions using AI
 
 ---
 
-## UI / UX
-- Dark SaaS-style interface
-- Gradient-based layout
-- Responsive design (mobile-first)
-- Reusable component system
-- Clean typography and spacing
-- Smooth hover and transition effects
+## AI Features
+* Job match score based on skills and experience
+* Skill gap suggestions
+* Resume feedback
+* Job description improvement
 
 ---
 
 ## Tech Stack
 
-### Frontend
-- React (Vite)
-- Tailwind CSS
-- Shadcn UI
-- React Router
-- Lucide Icons
+**Frontend:**
+* React (Vite)
+* Tailwind CSS
 
-### Backend / Services
-- Supabase (Database & APIs)
-- Clerk (Authentication)
+**Backend / Services:**
+* Supabase
+* Clerk Authentication
 
----
-
-## Project Architecture
-- Component-based UI structure
-- Centralized Supabase client
-- Custom hooks for data fetching
-- Separation of pages, components, and services
-- Role-based application flow
+**AI:**
+* Gemini API
 
 ---
 
-## Scalable Features (Can Be Added)
+## Setup
 
-- Advanced job recommendation system
-- Recruiter analytics dashboard
-- Email notifications for applications
-- Job application status tracking
-- Admin panel for platform moderation
-- Pagination & infinite scrolling
-- Saved searches & alerts
-- Multi-role permissions
-- Company profile pages
+\`\`\`bash
+git clone <repo-url>
+npm install
+npm run dev
+\`\`\`
+
+---
+
+## Environment Variables
+
+Create a \`.env\` file in the root directory:
+
+\`\`\`bash
+VITE_GEMINI_API_KEY=your_key
+VITE_SUPABASE_URL=your_url
+VITE_SUPABASE_KEY=your_key
+\`\`\`
+
+---
+
+## Deployment
+Deployed on Vercel.
+
+---
+
+## Notes
+This project is built as a practical implementation of a job portal with added AI features.

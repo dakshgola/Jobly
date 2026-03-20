@@ -36,6 +36,10 @@ const JobCard = ({
   } = useFetch(saveJob);
 
   const handleSaveJob = async () => {
+    if (job?.isSeed) {
+      alert("This is a demo job for preview purposes");
+      return;
+    }
     await fnSavedJob({
       user_id: user.id,
       job_id: job.id,
@@ -53,28 +57,35 @@ const JobCard = ({
   }, [savedJob]);
 
   return (
-    <Card className="glass-card flex flex-col hover:scale-[1.02] transition-all duration-300 border-0 overflow-hidden group">
+    <Card className="flex flex-col rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#1A212D]/60 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 overflow-hidden group">
       {loadingDeleteJob && (
         <BarLoader className="mt-4" width={"100%"} color="#8b5cf6" />
       )}
       
       <CardHeader className="pb-4">
-        <CardTitle className="flex justify-between items-start font-bold text-white text-xl">
+        <CardTitle className="flex justify-between items-start font-bold text-[var(--text-primary)] text-xl">
           <span className="flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-purple-400" />
+            <Briefcase className="w-5 h-5 text-[var(--accent-primary)]" />
             {job.title}
           </span>
-          {isMyJob && (
-            <Trash2Icon
-              size={18}
-              className="text-red-400 hover:text-red-500 cursor-pointer transition-colors"
-              onClick={handleDeleteJob}
-            />
-          )}
+          <div className="flex items-center gap-2">
+            {job.isSeed && (
+              <span className="text-xs badge-demo px-2 py-1 rounded font-normal">
+                Demo Job
+              </span>
+            )}
+            {isMyJob && (
+              <Trash2Icon
+                size={18}
+                className="text-red-400 hover:text-red-500 cursor-pointer transition-colors"
+                onClick={handleDeleteJob}
+              />
+            )}
+          </div>
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4 flex-1 text-gray-300">
+      <CardContent className="flex flex-col gap-4 flex-1 text-[var(--text-secondary)]">
         <div className="flex justify-between items-center">
           {job.company && (
             <img 
@@ -83,15 +94,15 @@ const JobCard = ({
               className="h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" 
             />
           )}
-          <div className="flex gap-2 items-center text-sm text-gray-400">
-            <MapPinIcon size={14} className="text-purple-400" /> 
+          <div className="flex gap-2 items-center text-sm text-[var(--text-secondary)]">
+            <MapPinIcon size={14} className="text-[var(--accent-primary)]" /> 
             {job.location}
           </div>
         </div>
         
-        <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+        <div className="h-px bg-[var(--border-color)] w-full opacity-50" />
         
-        <p className="text-sm text-gray-400 line-clamp-2">
+        <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
           {job.description.substring(0, job.description.indexOf("."))}.
         </p>
       </CardContent>
@@ -99,7 +110,7 @@ const JobCard = ({
       <CardFooter className="flex gap-2 pt-4">
         <Link to={`/job/${job.id}`} className="flex-1">
           <Button 
-            className="w-full glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 text-white font-semibold rounded-xl"
+            className="w-full glass-card border-[var(--border-color)] hover:border-blue-500/50 hover:bg-blue-500/10 text-[var(--text-primary)] font-semibold rounded-xl"
             variant="outline"
           >
             View Details
@@ -108,7 +119,7 @@ const JobCard = ({
         {!isMyJob && (
           <Button
             variant="outline"
-            className="glass-card border-purple-500/30 hover:border-purple-500/50 hover:bg-purple-500/10 w-12 h-10 p-0 rounded-xl"
+            className="glass-card border-[var(--border-color)] hover:border-blue-500/50 hover:bg-blue-500/10 w-12 h-10 p-0 rounded-xl"
             onClick={handleSaveJob}
             disabled={loadingSavedJob}
           >

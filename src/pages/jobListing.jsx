@@ -7,6 +7,8 @@ import useFetch from "@/hooks/use-fetch";
 import JobCard from "@/components/job-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getRecommendedJobs } from "@/services/aiRecommendations";
+import { Sparkles } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -24,8 +26,25 @@ const JobListing = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [location, setLocation] = useState("");
   const [company_id, setCompany_id] = useState("");
+  const [recommendedIds, setRecommendedIds] = useState([]);
+  const [isRecommending, setIsRecommending] = useState(false);
 
-  const { isLoaded } = useUser();
+  const { isLoaded, user } = useUser();
+  const isCandidate = user?.unsafeMetadata?.role !== "recruiter";
+
+  const handleGetRecommendations = async () => {
+    if (!jobs?.length) return;
+    setIsRecommending(true);
+    try {
+      const recs = await getRecommendedJobs(jobs, user?.unsafeMetadata);
+      console.log("Setting recommended IDs:", recs);
+      setRecommendedIds(recs || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsRecommending(false);
+    }
+  };
 
   const {
     data: companies,
@@ -69,7 +88,17 @@ const JobListing = () => {
   };
 
   if (!isLoaded) {
-    return <BarLoader className="mb-4" width={"100%"} color="#8b5cf6" />;
+    return (
+      <div className="pb-10 max-w-7xl mx-auto px-4 w-full">
+        <div className="h-16 w-1/3 bg-gray-800/50 animate-pulse rounded-xl mb-8 mx-auto" />
+        <div className="h-12 w-full bg-gray-800/50 animate-pulse rounded-xl mb-6" />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1,2,3,4,5,6].map(i => (
+             <div key={i} className="h-48 bg-gray-800/50 animate-pulse rounded-2xl" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -90,7 +119,7 @@ const JobListing = () => {
             type="text"
             placeholder="Search Jobs by Title..."
             name="search-query"
-            className="h-12 pl-12 pr-4 glass-card text-white placeholder:text-gray-500 border-purple-500/30 focus:border-purple-500 text-base"
+            className="h-12 pl-12 pr-4 glass-card text-white placeholder:text-gray-500 border-[var(--border-color)] focus:border-[var(--border-color)] text-base"
           />
         </div>
         <Button 
@@ -105,18 +134,18 @@ const JobListing = () => {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <Select value={location} onValueChange={(value) => setLocation(value)}>
-          <SelectTrigger className="glass-card border-purple-500/30 text-white h-12">
-            <MapPin className="w-4 h-4 mr-2 text-purple-400" />
+          <SelectTrigger className="glass-card border-[var(--border-color)] text-white h-12">
+            <MapPin className="w-4 h-4 mr-2 text-[var(--accent-primary)]" />
             <SelectValue placeholder="Filter by Location" />
           </SelectTrigger>
-          <SelectContent className="glass-card border-purple-500/30">
+          <SelectContent className="glass-card border-[var(--border-color)]">
             <SelectGroup>
               {State.getStatesOfCountry("IN").map(({ name }) => {
                 return (
                   <SelectItem 
                     key={name} 
                     value={name}
-                    className="text-white hover:bg-purple-500/20"
+                    className="text-white hover:bg-blue-500/20"
                   >
                     {name}
                   </SelectItem>
@@ -130,18 +159,18 @@ const JobListing = () => {
           value={company_id}
           onValueChange={(value) => setCompany_id(value)}
         >
-          <SelectTrigger className="glass-card border-purple-500/30 text-white h-12">
-            <Building2 className="w-4 h-4 mr-2 text-purple-400" />
+          <SelectTrigger className="glass-card border-[var(--border-color)] text-white h-12">
+            <Building2 className="w-4 h-4 mr-2 text-[var(--accent-primary)]" />
             <SelectValue placeholder="Filter by Company" />
           </SelectTrigger>
-          <SelectContent className="glass-card border-purple-500/30">
+          <SelectContent className="glass-card border-[var(--border-color)]">
             <SelectGroup>
               {companies?.map(({ name, id }) => {
                 return (
                   <SelectItem 
                     key={name} 
                     value={id}
-                    className="text-white hover:bg-purple-500/20"
+                    className="text-white hover:bg-blue-500/20"
                   >
                     {name}
                   </SelectItem>
@@ -163,27 +192,83 @@ const JobListing = () => {
 
       {/* Loading State */}
       {loadingJobs && (
-        <BarLoader className="mt-4" width={"100%"} color="#8b5cf6" />
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1,2,3,4,5,6].map(i => (
+             <div key={i} className="h-48 bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)]" />
+          ))}
+        </div>
       )}
 
-      {/* Job Cards Grid */}
+      {/* AI Recommendations Section */}
+      {jobs?.length > 0 && !loadingJobs && (
+        <div className="mt-6 mb-8 p-6 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#0B0F14]/80 shadow-sm transition-all duration-300">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+                <Sparkles className="w-5 h-5 text-purple-400" /> Recommended For You
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">Let Gemini analyze your profile against all open positions.</p>
+            </div>
+            
+            {!recommendedIds.length && !isRecommending && (
+              <Button onClick={handleGetRecommendations} className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl shadow-[0_0_15px_rgba(147,51,234,0.3)] transition-all">
+                <Sparkles className="w-4 h-4 mr-2" /> Uncover Perfect Matches
+              </Button>
+            )}
+
+            {isRecommending && (
+              <div className="flex items-center gap-2 text-purple-400 font-medium">
+                <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" /> Find matches...
+              </div>
+            )}
+          </div>
+
+          {recommendedIds.length > 0 && (
+             <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-4 duration-500 border-t border-[var(--border-color)] pt-6">
+               {jobs.filter(j => recommendedIds.map(String).includes(String(j.id))).map(job => (
+                 <div key={`rec-${job.id}`} className="relative group">
+                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                   <div className="relative">
+                     <JobCard job={job} savedInit={job?.saved?.length > 0} />
+                   </div>
+                 </div>
+               ))}
+             </div>
+          )}
+        </div>
+      )}
+
+      {/* Main Job Cards Grid */}
       {loadingJobs === false && (
         <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jobs?.length ? (
-            jobs.map((job) => {
-              return (
+            <>
+              {jobs[0]?.isSeed && (
+                <div className="col-span-full flex justify-center mb-6">
+                  <span className="text-sm bg-blue-500/20 border border-[var(--border-color)] text-[var(--accent-primary)] px-4 py-2 rounded-full flex items-center gap-2">
+                    🌟 Showing demo jobs for preview
+                  </span>
+                </div>
+              )}
+              {jobs.filter(job => !recommendedIds.map(String).includes(String(job.id))).map((job) => {
+                return (
                 <JobCard
                   key={job.id}
                   job={job}
                   savedInit={job?.saved?.length > 0}
                 />
               );
-            })
+            })}
+            </>
           ) : (
-            <div className="col-span-full text-center py-20">
-              <div className="glass-card p-12 rounded-2xl inline-block">
-                <p className="text-gray-400 text-lg">No Jobs Found</p>
-                <p className="text-gray-500 text-sm mt-2">Try adjusting your filters</p>
+            <div className="col-span-full text-center py-20 animate-in fade-in">
+              <div className="glass-card p-10 rounded-2xl inline-block border-[var(--border-color)] shadow-sm max-w-md w-full">
+                <Search className="w-12 h-12 text-[var(--accent-primary)] mx-auto mb-4 opacity-50" />
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">No matching jobs found</h3>
+                <p className="text-gray-400 text-sm mb-6">We couldn't find any positions matching your current filters. Try adjusting your search criteria or clearing filters.</p>
+                <Button onClick={clearFilters} variant="outline" className="text-white border-gray-600 hover:bg-gray-800 transition-transform hover:scale-[1.02]">
+                  Clear All Filters
+                </Button>
               </div>
             </div>
           )}

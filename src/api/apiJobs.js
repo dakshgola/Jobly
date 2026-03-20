@@ -1,4 +1,5 @@
 import supabaseClient from "@/utils/supabase";
+import { seedJobs } from "@/data/seedJobs";
 
 // Fetch Jobs
 export async function getJobs(token, { location, company_id, searchQuery }) {
@@ -23,7 +24,21 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
 
   if (error) {
     console.error("Error fetching Jobs:", error);
-    return null;
+  }
+
+  if (error || !data || data.length === 0) {
+    let fallbackJobs = seedJobs;
+    if (location) {
+      fallbackJobs = fallbackJobs.filter((job) =>
+        job.location.toLowerCase() === location.toLowerCase()
+      );
+    }
+    if (searchQuery) {
+      fallbackJobs = fallbackJobs.filter((job) =>
+        job.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    return fallbackJobs;
   }
 
   return data;
@@ -58,6 +73,10 @@ export async function getSingleJob(token, { job_id }) {
   const { data, error } = await query;
 
   if (error) {
+    const seedJob = seedJobs.find((job) => job.id === job_id);
+    if (seedJob) {
+      return { ...seedJob, applications: [] };
+    }
     console.error("Error fetching Job:", error);
     return null;
   }

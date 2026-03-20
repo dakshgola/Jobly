@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { Link } from "react-router-dom";
+import { Zap, TrendingUp, Search, CheckCircle2, Shield, Briefcase, LayoutDashboard, Sparkles } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import { motion } from "framer-motion";
 import companies from "../data/companies.json";
 import faqs from "../data/faq.json";
 import {
@@ -14,83 +11,102 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Link } from "react-router-dom";
-import { Sparkles, Zap, Shield, TrendingUp } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 const LandingPage = () => {
+  const { user } = useUser();
+  const role = user?.unsafeMetadata?.role;
+
+  // Animation variants
+  const fadeInUp = {
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-50px" },
+    transition: { duration: 0.6, ease: "easeOut" }
+  };
+
+  const staggerContainer = {
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, margin: "-50px" },
+    transition: { staggerChildren: 0.15 }
+  };
+
   return (
-    <main className="flex flex-col gap-20 sm:gap-28 py-10 sm:py-20">
-      {/* HERO SECTION - Modern & Premium */}
-      <section className="text-center hero-fade max-w-5xl mx-auto px-4">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 text-sm">
-          <Sparkles className="w-4 h-4 text-purple-400" />
-          <span className="text-gray-300">Discover jobs. Hire talent.</span>
-        </div>
+    <main className="flex flex-col gap-24 sm:gap-32 pb-20 sm:pb-32 overflow-hidden">
+      
+      {/* 1. CLEAN HERO (NO IMAGE) */}
+      <motion.section 
+        className="relative flex flex-col items-center justify-center text-center pt-24 sm:pt-36 px-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <p className="text-sm sm:text-base text-blue-400 font-medium tracking-wide uppercase mb-6 flex items-center gap-2">
+          <Sparkles className="w-4 h-4" />
+          Discover jobs. Hire talent.
+        </p>
 
-        <h1 className="text-center font-display text-white mb-6">
-          {/* Line 1 */}
-          <span className="block font-black text-4xl sm:text-6xl lg:text-7xl xl:text-8xl tracking-tight leading-[1.1] mb-2">
+        <h1 className="text-center font-display text-[var(--text-primary)] mb-6 max-w-4xl mx-auto">
+          <span className="block font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] tracking-tight leading-[1.15] mb-2 text-[var(--text-primary)]">
             Find The Right{" "}
-            <span className="gradient-text-animated block sm:inline mt-2 sm:mt-0">Opportunity</span>
-          </span>
-
-          {/* Line 2 */}
-          <span className="inline-flex items-center justify-center gap-2 sm:gap-3 flex-wrap mt-4">
-            <span className="font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight text-gray-100">
-              and get
+            <span className="bg-gradient-to-r from-blue-500 to-cyan-400 text-transparent bg-clip-text">
+              Opportunity
             </span>
-
-            <img
-              src="/hired.png"
-              alt="hired"
-              className="h-10 sm:h-16 lg:h-20 xl:h-24 drop-shadow-[0_0_25px_rgba(168,85,247,0.4)]"
-              style={{ marginLeft: '-0.25rem' }}
-            />
           </span>
         </h1>
 
-        <p className="text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed px-4">
-          Streamlining job discovery and talent acquisition with intuitive tools
-           and seamless workflows
+        <p className="mt-4 text-[var(--text-secondary)] text-base sm:text-lg lg:text-xl max-w-xl mx-auto mb-10 leading-relaxed px-4">
+          A modern job platform to connect candidates with top companies.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex gap-4 justify-center flex-wrap px-4">
-          <Link to="/jobs">
-            <Button
-              size="lg"
-              className="gradient-button text-white font-semibold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-xl shadow-lg"
-            >
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              Browse Jobs
-            </Button>
-          </Link>
-          <Link to="/post-job">
-            <Button
-              size="lg"
-              variant="outline"
-              className="glass-card text-white font-semibold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-xl border-purple-500/30 hover:border-purple-500/50 shadow-lg"
-            >
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              Post a Job
-            </Button>
-          </Link>
-        </div>
-      </section>
+        <div className="flex flex-col items-center gap-4 w-full">
+          <div className="flex justify-center gap-4 flex-wrap w-full px-4">
+            <Link to="/jobs" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 sm:px-8 py-6 rounded-xl shadow-sm transition-transform hover:scale-[1.02] border-0"
+              >
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Find your next role
+              </Button>
+            </Link>
 
-      {/* TRUSTED BY SECTION */}
-      <section className="stagger-fade px-4">
-        <p className="text-center text-gray-500 text-xs sm:text-sm mb-10 uppercase tracking-wider font-medium">
+            {role === "recruiter" && (
+              <Link to="/post-job" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto glass-card text-[var(--text-primary)] font-medium px-6 sm:px-8 py-6 rounded-xl border border-[var(--border-color)] hover:bg-[#1A212D] shadow-sm transition-transform hover:scale-[1.02]"
+                >
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                  Post a Job
+                </Button>
+              </Link>
+            )}
+          </div>
+
+          {role === "candidate" && (
+            <p className="text-sm text-[var(--text-secondary)] mt-4 opacity-80">
+              Want to hire? Switch to a recruiter account.
+            </p>
+          )}
+        </div>
+      </motion.section>
+
+      {/* TRUSTED BY (Integrated subtly below hero) */}
+      <motion.section {...fadeInUp} className="px-4">
+        <p className="text-center text-gray-500 text-xs sm:text-sm mb-10 uppercase tracking-wider font-semibold">
           Trusted by leading companies
         </p>
         <Carousel
-          plugins={[
-            Autoplay({
-              delay: 2000,
-            }),
-          ]}
-          className="w-full"
+          plugins={[Autoplay({ delay: 3000 })]}
+          className="w-full max-w-6xl mx-auto"
         >
           <CarouselContent className="flex gap-8 sm:gap-12 lg:gap-16 items-center">
             {companies.map(({ name, id, path }) => (
@@ -98,80 +114,159 @@ const LandingPage = () => {
                 <img
                   src={path}
                   alt={name}
-                  className="h-6 sm:h-10 lg:h-12 object-contain opacity-60 grayscale-0 transition-all duration-300"
+                  className="h-6 sm:h-8 lg:h-10 object-contain mx-auto opacity-80 transition-all duration-300 hover:opacity-100 hover:scale-110 drop-shadow-sm"
                 />
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
-      </section>
+      </motion.section>
 
-      {/* BANNER IMAGE with modern treatment */}
-      <section className="relative rounded-2xl sm:rounded-3xl overflow-hidden glass-card p-1 mx-4">
-        <img
-          src="/banner.jpeg"
-          alt="Platform showcase"
-          className="w-full rounded-xl sm:rounded-2xl"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0118] via-transparent to-transparent pointer-events-none rounded-xl sm:rounded-2xl" />
-      </section>
 
-      {/* FEATURES SECTION - Modern Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
-        <div className="glass-card p-6 sm:p-8 rounded-2xl group">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-            <Sparkles className="w-6 h-6 text-white" />
+
+      {/* 3. STATS SECTION */}
+      <motion.section {...fadeInUp} className="max-w-5xl mx-auto px-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-20 border-y border-[var(--border-color)]">
+          <div className="text-center p-5">
+            <h3 className="text-5xl sm:text-6xl font-black text-[var(--text-primary)] mb-2 font-display">120+</h3>
+            <p className="text-[var(--text-secondary)] font-medium text-lg tracking-wide uppercase">Jobs</p>
           </div>
-          <CardTitle className="font-bold text-xl sm:text-2xl mb-4 text-white">
-            For Candidates
-          </CardTitle>
-          <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
-            Discover relevant opportunities with AI-powered matching, apply
-            seamlessly with one click, and track your progress in a unified
-            dashboard
-          </p>
-        </div>
-
-        <div className="glass-card p-6 sm:p-8 rounded-2xl group">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-            <Shield className="w-6 h-6 text-white" />
+          <div className="text-center p-5">
+            <h3 className="text-5xl sm:text-6xl font-black text-[var(--text-primary)] mb-2 font-display">45+</h3>
+            <p className="text-[var(--text-secondary)] font-medium text-lg tracking-wide uppercase">Companies</p>
           </div>
-          <CardTitle className="font-bold text-xl sm:text-2xl mb-4 text-white">
-            For Employers
-          </CardTitle>
-          <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
-            Post openings in seconds, manage applicants with powerful filters,
-            and hire top talent faster with our streamlined recruitment tools
-          </p>
+          <div className="text-center p-5">
+            <h3 className="text-5xl sm:text-6xl font-black text-[var(--text-primary)] mb-2 font-display">300+</h3>
+            <p className="text-[var(--text-secondary)] font-medium text-lg tracking-wide uppercase">Applications</p>
+          </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* FAQ SECTION - Modern Accordion */}
-      <section className="max-w-3xl mx-auto w-full px-4">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-4 text-white">
-          Frequently Asked Questions
+      {/* 4. FEATURES (SaaS Feel) */}
+      <motion.section 
+        variants={staggerContainer}
+        initial="initial"
+        whileInView="whileInView"
+        viewport={{ once: true, margin: "-50px" }}
+        className="max-w-6xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10 mt-24"
+      >
+        <motion.div variants={fadeInUp} className="p-8 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#0B0F14]/80 transition-all duration-300 shadow-sm hover:scale-[1.02] hover:shadow-xl hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] group">
+          <div className="flex justify-between items-start mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/10 to-blue-500/5 flex items-center justify-center border border-blue-500/20 transition-all">
+              <Search className="w-7 h-7 text-blue-400" />
+            </div>
+            <span className="text-xs font-semibold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">Real-time Filters</span>
+          </div>
+          <h3 className="font-bold text-2xl mb-3 text-[var(--text-primary)]">Smart Job Search</h3>
+          <p className="text-[var(--text-secondary)] leading-relaxed text-lg">Search jobs by title, filter by location and company, and discover opportunities tailored to your preferences in real-time.</p>
+        </motion.div>
+
+        <motion.div variants={fadeInUp} className="p-8 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#0B0F14]/80 transition-all duration-300 shadow-sm hover:scale-[1.02] hover:shadow-xl hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] group">
+          <div className="flex justify-between items-start mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 flex items-center justify-center border border-cyan-500/20 transition-all">
+              <Zap className="w-7 h-7 text-cyan-400" />
+            </div>
+            <span className="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">1-Click Apply</span>
+          </div>
+          <h3 className="font-bold text-2xl mb-3 text-[var(--text-primary)]">Easy Apply</h3>
+          <p className="text-[var(--text-secondary)] leading-relaxed text-lg">Apply to jobs in seconds with a streamlined application flow and manage your saved opportunities effortlessly.</p>
+        </motion.div>
+
+        <motion.div variants={fadeInUp} className="p-8 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#0B0F14]/80 transition-all duration-300 shadow-sm hover:scale-[1.02] hover:shadow-xl hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] group">
+          <div className="flex justify-between items-start mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/10 to-purple-500/5 flex items-center justify-center border border-purple-500/20 transition-all">
+              <LayoutDashboard className="w-7 h-7 text-purple-400" />
+            </div>
+            <span className="text-xs font-semibold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">Full Control</span>
+          </div>
+          <h3 className="font-bold text-2xl mb-3 text-[var(--text-primary)]">Recruiter Dashboard</h3>
+          <p className="text-[var(--text-secondary)] leading-relaxed text-lg">Post jobs, manage listings, and track applications with a powerful dashboard designed for efficient hiring workflows.</p>
+        </motion.div>
+      </motion.section>
+
+      {/* 5. HOW IT WORKS (Horizontal Steps) */}
+      <motion.section {...fadeInUp} className="max-w-6xl mx-auto px-4 w-full mt-24">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-16 text-[var(--text-primary)] font-display tracking-tight">
+          How It Works
         </h2>
-        <p className="text-center text-gray-400 mb-12 text-sm sm:text-base">
-          Everything you need to know about our platform
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+          {/* Connecting line for desktop */}
+          <div className="hidden md:block absolute top-[40px] left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-[var(--border-color)] to-transparent -z-10" />
+          
+          <motion.div variants={fadeInUp} className="flex flex-col items-center text-center group">
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-[#0B0F14] border border-[var(--border-color)] shadow-xl mb-6 relative z-10 transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+              <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--text-primary)] font-bold text-[#0B0F14] flex items-center justify-center text-sm shadow-lg">1</span>
+              <Search className="w-8 h-8 text-[var(--text-primary)]" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Browse Jobs</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Explore job listings using powerful search and filters to find roles that match your skills and interests.</p>
+          </motion.div>
+
+          <motion.div variants={fadeInUp} className="flex flex-col items-center text-center group">
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-[#0B0F14] border border-[var(--border-color)] shadow-xl mb-6 relative z-10 transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+              <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--text-primary)] font-bold text-[#0B0F14] flex items-center justify-center text-sm shadow-lg">2</span>
+              <Shield className="w-8 h-8 text-[var(--text-primary)]" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Apply Easily</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Submit applications instantly and keep track of saved jobs and opportunities in one place.</p>
+          </motion.div>
+
+          <motion.div variants={fadeInUp} className="flex flex-col items-center text-center group">
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-blue-500 border border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.4)] mb-6 relative z-10 transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+              <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white font-bold text-blue-600 flex items-center justify-center text-sm shadow-lg shadow-blue-500/20">3</span>
+              <CheckCircle2 className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Get Hired</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Connect with recruiters, get shortlisted, and land your next opportunity with a seamless hiring experience.</p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* FAQ (Refined Minimal Style) */}
+      <motion.section {...fadeInUp} className="max-w-3xl mx-auto w-full px-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4 text-[var(--text-primary)] tracking-tight">
+          Frequently asked
+        </h2>
+        <p className="text-center text-[var(--text-secondary)] mb-12 text-sm sm:text-lg">
+          Everything you need to know about our platform.
         </p>
 
-        <Accordion type="multiple" className="w-full space-y-4">
+        <Accordion type="single" collapsible className="w-full space-y-4">
           {faqs.map((faq, index) => (
             <AccordionItem
               key={index}
               value={`item-${index + 1}`}
-              className="glass-card px-6 rounded-xl border-0"
+              className="px-6 py-2 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/30"
             >
-              <AccordionTrigger className="text-white hover:text-purple-400 text-left text-sm sm:text-base">
+              <AccordionTrigger className="text-[var(--text-primary)] hover:text-blue-400 text-left text-base sm:text-lg font-semibold border-0 !no-underline">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-400 text-sm sm:text-base">
+              <AccordionContent className="text-[var(--text-secondary)] text-base sm:text-lg leading-relaxed pt-2 pb-6 border-0">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
-      </section>
+      </motion.section>
+
+      {/* 6. FINAL CTA */}
+      <motion.section 
+        {...fadeInUp} 
+        className="text-center max-w-4xl mx-auto px-4 mt-8 bg-gradient-to-b from-transparent to-blue-900/10 rounded-3xl py-16 sm:py-24 border border-[var(--border-color)]/50"
+      >
+        <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-[var(--text-primary)] tracking-tight">
+          Ready to get started?
+        </h2>
+        <p className="text-[var(--text-secondary)] mb-10 text-lg sm:text-xl max-w-2xl mx-auto font-medium">
+          Join thousands of modern professionals finding their next big break.
+        </p>
+        <Link to="/jobs">
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-10 py-7 rounded-xl shadow-sm text-lg transition-transform hover:scale-[1.02] border-0">
+            Find your next role
+          </Button>
+        </Link>
+      </motion.section>
+
     </main>
   );
 };

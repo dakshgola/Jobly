@@ -30,7 +30,15 @@ const Onboarding = () => {
   }, [isLoaded, user]);
 
   if (!isLoaded) {
-    return <BarLoader className="mb-4" width="100%" color="#8b5cf6" />;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 animate-pulse">
+        <div className="h-16 w-64 bg-gray-800/50 rounded-xl mb-12" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-3xl">
+          <div className="h-64 bg-gray-800/40 rounded-2xl" />
+          <div className="h-64 bg-gray-800/40 rounded-2xl" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -50,10 +58,10 @@ const Onboarding = () => {
         {/* Candidate */}
         <button
           onClick={() => handleRoleSelection("candidate")}
-          className="glass-card p-8 rounded-2xl border border-purple-500/30 hover:border-purple-500/60 hover:scale-105 transition-all duration-300"
+          className="glass-card p-8 rounded-2xl border border-[var(--border-color)] hover:border-blue-500/60 hover:scale-[1.02] transition-all duration-300"
         >
           <div className="flex flex-col items-center text-center gap-4">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
               <UserCircle className="w-10 h-10 text-white" />
             </div>
             <div>
@@ -70,7 +78,7 @@ const Onboarding = () => {
         {/* Recruiter */}
         <button
           onClick={() => handleRoleSelection("recruiter")}
-          className="glass-card p-8 rounded-2xl border border-blue-500/30 hover:border-blue-500/60 hover:scale-105 transition-all duration-300"
+          className="glass-card p-8 rounded-2xl border border-[var(--border-color)] hover:border-blue-500/60 hover:scale-[1.02] transition-all duration-300"
         >
           <div className="flex flex-col items-center text-center gap-4">
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">

@@ -58,6 +58,10 @@ export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
   } = useFetch(applyToJob);
 
   const onSubmit = (data) => {
+    if (job?.isSeed) {
+      alert("This is a demo job for preview purposes");
+      return;
+    }
     fnApply({
       ...data,
       job_id: job.id,

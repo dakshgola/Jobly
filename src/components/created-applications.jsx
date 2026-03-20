@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { getApplications } from "@/api/apiApplication";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
+import { FolderOpen } from "lucide-react";
 
 const CreatedApplications = () => {
   const { user } = useUser();
@@ -22,20 +23,34 @@ const CreatedApplications = () => {
   }, []);
 
   if (loadingApplications) {
-    return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
+    return (
+      <div className="flex flex-col gap-4 mt-4 w-full">
+        <div className="h-28 w-full bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)]" />
+        <div className="h-28 w-full bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)]" />
+        <div className="h-28 w-full bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)]" />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      {applications?.map((application) => {
-        return (
+    <div className="flex flex-col gap-4">
+      {applications?.length > 0 ? (
+        applications.map((application) => (
           <ApplicationCard
             key={application.id}
             application={application}
             isCandidate={true}
           />
-        );
-      })}
+        ))
+      ) : (
+        <div className="text-center py-20 animate-in fade-in">
+          <div className="glass-card p-10 rounded-2xl inline-block border-[var(--border-color)] shadow-sm max-w-md w-full">
+            <FolderOpen className="w-12 h-12 text-[var(--accent-primary)] mx-auto mb-4 opacity-50" />
+            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">No Applications Yet</h3>
+            <p className="text-gray-400 text-sm">You haven't applied to any jobs yet. Start exploring opportunities to build your career.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
