@@ -9,7 +9,7 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
     .select("*, saved: saved_jobs(id), company: companies(name,logo_url)");
 
   if (location) {
-    query = query.eq("location", location);
+    query = query.ilike("location", `%${location}%`);
   }
 
   if (company_id) {
@@ -30,13 +30,18 @@ export async function getJobs(token, { location, company_id, searchQuery }) {
     let fallbackJobs = seedJobs;
     if (location) {
       fallbackJobs = fallbackJobs.filter((job) =>
-        job.location.toLowerCase() === location.toLowerCase()
+        job.location.toLowerCase().includes(location.toLowerCase())
       );
     }
     if (searchQuery) {
       fallbackJobs = fallbackJobs.filter((job) =>
         job.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
+    }
+    if (company_id) {
+       // Best effort to find company name based on ID passed from select if there's no DB
+       // but seedJobs only have names. Filter out if standard company_id is provided.
+       return [];
     }
     return fallbackJobs;
   }

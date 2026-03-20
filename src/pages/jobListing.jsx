@@ -78,7 +78,7 @@ const JobListing = () => {
     let formData = new FormData(e.target);
 
     const query = formData.get("search-query");
-    if (query) setSearchQuery(query);
+    setSearchQuery(query || "");
   };
 
   const clearFilters = () => {
@@ -133,7 +133,7 @@ const JobListing = () => {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
-        <Select value={location} onValueChange={(value) => setLocation(value)}>
+        <Select value={location || undefined} onValueChange={(value) => setLocation(value)}>
           <SelectTrigger className="glass-card border-[var(--border-color)] text-white h-12">
             <MapPin className="w-4 h-4 mr-2 text-[var(--accent-primary)]" />
             <SelectValue placeholder="Filter by Location" />
@@ -156,7 +156,7 @@ const JobListing = () => {
         </Select>
 
         <Select
-          value={company_id}
+          value={company_id || undefined}
           onValueChange={(value) => setCompany_id(value)}
         >
           <SelectTrigger className="glass-card border-[var(--border-color)] text-white h-12">
