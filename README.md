@@ -73,7 +73,3 @@ VITE_SUPABASE_KEY=your_key
 ## Deployment
 Deployed on Vercel.
 
----
-
-## Notes
-This project is built as a practical implementation of a job portal with added AI features.
