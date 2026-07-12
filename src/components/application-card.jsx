@@ -44,9 +44,11 @@ const ApplicationCard = ({ application, isCandidate = false, onStatusChange }) =
     <Card className="rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/40 hover:bg-[#0B0F14]/60 shadow-sm transition-all duration-300">
       {loadingHiringStatus && <BarLoader width={"100%"} color="#8b5cf6" />}
       <CardHeader>
-        <CardTitle className="flex justify-between font-bold text-white text-lg">
+        <CardTitle className="flex justify-between font-bold text-white text-lg animate-in fade-in">
           {isCandidate
-            ? `${application?.job?.title} at ${application?.job?.company?.name}`
+            ? application?.external_job_id
+              ? `${application?.external_job?.title} at ${application?.external_job?.company}`
+              : `${application?.job?.title} at ${application?.job?.company?.name}`
             : application?.name}
           <Download
             size={18}

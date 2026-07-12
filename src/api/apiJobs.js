@@ -86,13 +86,18 @@ export async function getSingleJob(token, { job_id }) {
       .single();
 
     if (!extError && extData) {
+      const { data: extApps } = await supabase
+        .from("applications")
+        .select("*")
+        .eq("external_job_id", job_id);
+
       return {
         ...extData,
         company: {
           name: extData.company || "External Company",
           logo_url: null,
         },
-        applications: [],
+        applications: extApps || [],
         isOpen: true,
         isExternal: true,
       };

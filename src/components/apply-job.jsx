@@ -62,9 +62,15 @@ export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
       alert("This is a demo job for preview purposes");
       return;
     }
+
+    if (job?.isExternal) {
+      window.open(job.apply_url, "_blank");
+    }
+
     fnApply({
       ...data,
-      job_id: job.id,
+      job_id: job?.isExternal ? null : job.id,
+      external_job_id: job?.isExternal ? job.id : null,
       candidate_id: user.id,
       name: user.fullName,
       status: "applied",
@@ -89,7 +95,7 @@ export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>
-            Apply for {job?.title} at {job?.company?.name}
+            Apply for {job?.title} at {job?.isExternal ? job?.company : job?.company?.name}
           </DrawerTitle>
           <DrawerDescription>Please Fill the form below</DrawerDescription>
         </DrawerHeader>
@@ -155,7 +161,7 @@ export function ApplyJobDrawer({ user, job, fetchJob, applied = false }) {
           )}
           {loadingApply && <BarLoader width={"100%"} color="#36d7b7" />}
           <Button type="submit" variant="blue" size="lg">
-            Apply
+            {job?.isExternal ? "Mark as Applied" : "Apply"}
           </Button>
         </form>
 

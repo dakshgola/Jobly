@@ -199,21 +199,13 @@ const JobPage = () => {
           />
         </>
       )}
-      {job?.isExternal ? (
-        <a href={job.apply_url} target="_blank" rel="noopener noreferrer" className="w-full">
-          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-6 text-lg font-bold shadow-md transition-transform hover:scale-[1.01] border-0">
-            Apply on External Site
-          </Button>
-        </a>
-      ) : (
-        job?.recruiter_id !== user?.id && (
-          <ApplyJobDrawer
-            job={job}
-            user={user}
-            fetchJob={fnJob}
-            applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
-          />
-        )
+      {job?.recruiter_id !== user?.id && (
+        <ApplyJobDrawer
+          job={job}
+          user={user}
+          fetchJob={fnJob}
+          applied={job?.applications?.find((ap) => ap.candidate_id === user?.id)}
+        />
       )}
       {loadingHiringStatus && <BarLoader width={"100%"} color="#36d7b7" />}
       {job?.applications?.length > 0 && job?.recruiter_id === user?.id && (
