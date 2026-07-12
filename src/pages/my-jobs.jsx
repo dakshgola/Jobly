@@ -1,5 +1,5 @@
 import CreatedApplications from "@/components/created-applications";
-import CreatedJobs from "@/components/created-jobs";
+
 import { TestExternalFetch } from "@/components/test-external-fetch";
 import { useUser } from "@clerk/clerk-react";
 import { BarLoader } from "react-spinners";
@@ -32,7 +32,7 @@ import useFetch from "@/hooks/use-fetch";
 const MyJobs = () => {
   const { user, isLoaded } = useUser();
 
-  const isCandidate = user?.unsafeMetadata?.role !== "recruiter";
+  const isCandidate = true;
 
   // Profile data state
   const {
@@ -782,11 +782,7 @@ const MyJobs = () => {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto">
-        {isCandidate ? (
-          <CreatedApplications />
-        ) : (
-          <CreatedJobs />
-        )}
+        <CreatedApplications />
       </div>
 
       {/* Sleek Custom Glassmorphic Toast Notification */}

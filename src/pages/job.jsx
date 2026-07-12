@@ -17,7 +17,7 @@ import ApplicationCard from "@/components/application-card";
 import { Button } from "@/components/ui/button";
 
 import useFetch from "@/hooks/use-fetch";
-import { getSingleJob, updateHiringStatus } from "@/api/apiJobs";
+import { getSingleJob } from "@/api/apiJobs";
 import { getMatchScore } from "@/services/aiMatch";
 
 const JobPage = () => {
@@ -51,17 +51,7 @@ const JobPage = () => {
     if (isLoaded) fnJob();
   }, [isLoaded]);
 
-  const { loading: loadingHiringStatus, fn: fnHiringStatus } = useFetch(
-    updateHiringStatus,
-    {
-      job_id: id,
-    }
-  );
 
-  const handleStatusChange = (value) => {
-    const isOpen = value === "open";
-    fnHiringStatus(isOpen).then(() => fnJob());
-  };
 
   if (!isLoaded || loadingJob) {
     return (
@@ -116,23 +106,7 @@ const JobPage = () => {
         </div>
       </div>
 
-      {job?.recruiter_id === user?.id && (
-        <Select onValueChange={handleStatusChange}>
-          <SelectTrigger
-            className={`w-full ${job?.isOpen ? "bg-green-950" : "bg-red-950"}`}
-          >
-            <SelectValue
-              placeholder={
-                "Hiring Status " + (job?.isOpen ? "( Open )" : "( Closed )")
-              }
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="open">Open</SelectItem>
-            <SelectItem value="closed">Closed</SelectItem>
-          </SelectContent>
-        </Select>
-      )}
+
 
       {/* AI MATCH SCORE SECTION */}
       <div className="mt-2 p-6 rounded-2xl border border-[var(--border-color)] bg-[#0B0F14]/40 relative overflow-hidden group shadow-sm transition-all">

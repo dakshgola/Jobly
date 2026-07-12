@@ -41,7 +41,7 @@ const Header = () => {
         {/* Centered Badge */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass border border-[var(--border-color)] text-[10px] sm:text-sm shadow-sm z-10 pointer-events-none whitespace-nowrap">
           <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-[var(--accent-primary)]" />
-          <span className="text-[var(--text-secondary)] font-medium">Discover jobs. Hire talent.</span>
+          <span className="text-[var(--text-secondary)] font-medium">Find jobs instantly.</span>
         </div>
 
         <div className="flex gap-3 sm:gap-4 items-center z-10 justify-end w-24 sm:w-32">
@@ -55,15 +55,6 @@ const Header = () => {
             </Button>
           </SignedOut>
           <SignedIn>
-            {user?.unsafeMetadata?.role === "recruiter" && (
-              <Link to="/post-job">
-                <Button className="gradient-button text-white rounded-xl px-4 sm:px-6 text-sm sm:text-base py-2">
-                  <PenBox size={16} className="mr-2 sm:inline hidden" />
-                  <span className="hidden sm:inline">Post a Job</span>
-                  <span className="sm:hidden">Post</span>
-                </Button>
-              </Link>
-            )}
             <UserButton
               appearance={{
                 elements: {
@@ -96,8 +87,8 @@ const Header = () => {
           onClick={handleOverlayClick}
         >
           <SignIn
-            signUpForceRedirectUrl="/onboarding"
-            fallbackRedirectUrl="/onboarding"
+            signUpForceRedirectUrl="/jobs"
+            fallbackRedirectUrl="/jobs"
           />
         </div>
       )}

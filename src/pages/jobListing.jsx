@@ -40,7 +40,7 @@ const JobListing = () => {
   const [isRanking, setIsRanking] = useState(false);
 
   const { isLoaded, user } = useUser();
-  const isCandidate = user?.unsafeMetadata?.role !== "recruiter";
+  const isCandidate = true;
 
   // Fetch candidate profile for AI matching
   const {
