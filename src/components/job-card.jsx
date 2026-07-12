@@ -86,13 +86,27 @@ const JobCard = ({
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4 flex-1 text-[var(--text-secondary)]">
-        <div className="flex justify-between items-center">
-          {job.company && (
-            <img 
-              src={job.company.logo_url} 
-              alt={job.company.name}
-              className="h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" 
-            />
+        <div className="flex justify-between items-center gap-4">
+          {job.company ? (
+            typeof job.company === "object" ? (
+              job.company.logo_url ? (
+                <img 
+                  src={job.company.logo_url} 
+                  alt={job.company.name}
+                  className="h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" 
+                />
+              ) : (
+                <span className="text-xs font-bold text-blue-400 border border-blue-500/10 bg-blue-500/5 px-2 py-1 rounded">
+                  {job.company.name}
+                </span>
+              )
+            ) : (
+              <span className="text-xs font-bold text-blue-400 border border-blue-500/10 bg-blue-500/5 px-2 py-1 rounded">
+                {job.company}
+              </span>
+            )
+          ) : (
+            <span className="text-xs font-bold text-gray-500">Anonymous Company</span>
           )}
           <div className="flex gap-2 items-center text-sm text-[var(--text-secondary)]">
             <MapPinIcon size={14} className="text-[var(--accent-primary)]" /> 
@@ -103,7 +117,11 @@ const JobCard = ({
         <div className="h-px bg-[var(--border-color)] w-full opacity-50" />
         
         <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
-          {job.description.substring(0, job.description.indexOf("."))}.
+          {job.description && (
+            job.description.includes(".") 
+              ? job.description.substring(0, job.description.indexOf(".") + 1)
+              : job.description
+          )}
         </p>
       </CardContent>
 

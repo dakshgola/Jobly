@@ -87,7 +87,13 @@ const JobPage = () => {
         <h1 className="gradient-title font-extrabold pb-3 text-4xl sm:text-6xl">
           {job?.title}
         </h1>
-        <img src={job?.company?.logo_url} className="h-12" alt={job?.title} />
+        {job?.company?.logo_url ? (
+          <img src={job?.company?.logo_url} className="h-12 object-contain" alt={job?.company?.name || job?.title} />
+        ) : (
+          <span className="text-lg font-bold text-blue-400 border border-blue-500/10 bg-blue-500/5 px-4 py-2 rounded-xl">
+            {job?.company?.name || "External Company"}
+          </span>
+        )}
       </div>
 
       <div className="flex justify-between ">
@@ -182,20 +188,32 @@ const JobPage = () => {
       <h2 className="text-2xl sm:text-3xl font-bold">About the job</h2>
       <p className="sm:text-lg">{job?.description}</p>
 
-      <h2 className="text-2xl sm:text-3xl font-bold">
-        What we are looking for
-      </h2>
-      <MDEditor.Markdown
-        source={job?.requirements}
-        className="bg-transparent sm:text-lg" // add global ul styles - tutorial
-      />
-      {job?.recruiter_id !== user?.id && (
-        <ApplyJobDrawer
-          job={job}
-          user={user}
-          fetchJob={fnJob}
-          applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
-        />
+      {job?.requirements && (
+        <>
+          <h2 className="text-2xl sm:text-3xl font-bold">
+            What we are looking for
+          </h2>
+          <MDEditor.Markdown
+            source={job?.requirements}
+            className="bg-transparent sm:text-lg"
+          />
+        </>
+      )}
+      {job?.isExternal ? (
+        <a href={job.apply_url} target="_blank" rel="noopener noreferrer" className="w-full">
+          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-6 text-lg font-bold shadow-md transition-transform hover:scale-[1.01] border-0">
+            Apply on External Site
+          </Button>
+        </a>
+      ) : (
+        job?.recruiter_id !== user?.id && (
+          <ApplyJobDrawer
+            job={job}
+            user={user}
+            fetchJob={fnJob}
+            applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
+          />
+        )
       )}
       {loadingHiringStatus && <BarLoader width={"100%"} color="#36d7b7" />}
       {job?.applications?.length > 0 && job?.recruiter_id === user?.id && (

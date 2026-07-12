@@ -23,6 +23,8 @@ import {
 
 import { getCompanies } from "@/api/apiCompanies";
 import { getJobs } from "@/api/apiJobs";
+import { getExternalJobs, upsertExternalJobs } from "@/api/apiExternalJobs";
+import { fetchJSearchJobs } from "@/services/jobFetchService";
 import { Search, MapPin, Building2, X } from "lucide-react";
 
 const JobListing = () => {
@@ -65,11 +67,52 @@ const JobListing = () => {
     loading: loadingJobs,
     data: jobs,
     fn: fnJobs,
-  } = useFetch(getJobs, {
-    location,
-    company_id,
+  } = useFetch(getExternalJobs, {
     searchQuery,
+    location,
   });
+
+  const [isLiveFetching, setIsLiveFetching] = useState(false);
+  const [fetchedQueries, setFetchedQueries] = useState(new Set());
+
+  const { loading: loadingSync, fn: fnUpsertExternalJobs } = useFetch(upsertExternalJobs);
+
+  const handleLiveFetchAndSync = async () => {
+    if (isLiveFetching || loadingSync) return;
+    setIsLiveFetching(true);
+    try {
+      const query = searchQuery || "Software Engineer";
+      const loc = location || "";
+      const fetched = await fetchJSearchJobs(query, loc);
+      if (fetched && fetched.length > 0) {
+        await fnUpsertExternalJobs(null, fetched);
+        // Refresh local listings cache
+        fnJobs();
+      }
+    } catch (err) {
+      console.error("Live fetch and sync failed:", err);
+    } finally {
+      setIsLiveFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    const currentKey = `${searchQuery || "Software Engineer"}_${location || ""}`;
+    if (
+      jobs !== undefined && 
+      jobs.length === 0 && 
+      !loadingJobs && 
+      !isLiveFetching && 
+      !fetchedQueries.has(currentKey)
+    ) {
+      setFetchedQueries(prev => {
+        const next = new Set(prev);
+        next.add(currentKey);
+        return next;
+      });
+      handleLiveFetchAndSync();
+    }
+  }, [jobs, loadingJobs, searchQuery, location, fetchedQueries]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -81,7 +124,7 @@ const JobListing = () => {
   useEffect(() => {
     if (isLoaded) fnJobs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, location, company_id, searchQuery]);
+  }, [isLoaded, location, searchQuery]);
 
   const handleGetRecommendations = async () => {
     if (!jobs?.length) return;
@@ -264,10 +307,10 @@ const JobListing = () => {
           </div>
 
           {/* Loading State */}
-          {loadingJobs && (
+          {(loadingJobs || isLiveFetching) && (
             <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1,2,3,4,5,6].map(i => (
-                 <div key={i} className="h-48 bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)]" />
+                 <div key={i} className="h-48 bg-gray-800/40 animate-pulse rounded-2xl border border-[var(--border-color)] animate-pulse" />
               ))}
             </div>
           )}
@@ -312,7 +355,7 @@ const JobListing = () => {
           )}
 
           {/* Main Job Cards Grid */}
-          {loadingJobs === false && (
+          {(loadingJobs === false && !isLiveFetching) && (
             <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {jobs?.length ? (
                 <>

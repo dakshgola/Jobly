@@ -78,6 +78,26 @@ export async function getSingleJob(token, { job_id }) {
   const { data, error } = await query;
 
   if (error) {
+    // Attempt fallback to external_jobs table
+    const { data: extData, error: extError } = await supabase
+      .from("external_jobs")
+      .select("*")
+      .eq("id", job_id)
+      .single();
+
+    if (!extError && extData) {
+      return {
+        ...extData,
+        company: {
+          name: extData.company || "External Company",
+          logo_url: null,
+        },
+        applications: [],
+        isOpen: true,
+        isExternal: true,
+      };
+    }
+
     const seedJob = seedJobs.find((job) => job.id === job_id);
     if (seedJob) {
       return { ...seedJob, applications: [] };

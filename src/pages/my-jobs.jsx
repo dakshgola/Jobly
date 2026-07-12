@@ -1,5 +1,6 @@
 import CreatedApplications from "@/components/created-applications";
 import CreatedJobs from "@/components/created-jobs";
+import { TestExternalFetch } from "@/components/test-external-fetch";
 import { useUser } from "@clerk/clerk-react";
 import { BarLoader } from "react-spinners";
 import { 
@@ -773,6 +774,11 @@ const MyJobs = () => {
           </div>
         </div>
       )}
+
+      {/* Test Integration Pipeline */}
+      <div className="max-w-7xl mx-auto mb-8 px-4">
+        <TestExternalFetch />
+      </div>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto">
