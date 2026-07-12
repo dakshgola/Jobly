@@ -75,19 +75,6 @@ Ensure you have Node.js installed locally.
 
 ---
 
-## Screenshots
-
-### Resume Upload & Profile Parsing Flow
-![Resume Upload & Profile Parsing Flow Placeholder](https://placehold.co/800x450/0B0F14/FFFFFF?text=Resume+Upload+and+AI+Profile+Extraction)
-
-### AI Matches Tab
-![AI Matches Tab Placeholder](https://placehold.co/800x450/0B0F14/FFFFFF?text=AI+Job+Matching+and+Rankings+View)
-
-### Candidate Application Dashboard
-![Candidate Application Dashboard Placeholder](https://placehold.co/800x450/0B0F14/FFFFFF?text=Application+Tracking+and+Status+Metrics)
-
----
-
 ## Known Limitations
 
 * **API Free-Tier Rate Limits**: The JSearch API is subject to monthly search volume limits under the free tier. Frequent query refreshes might trigger rate warnings.
