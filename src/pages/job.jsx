@@ -203,7 +203,11 @@ const JobPage = () => {
           <h2 className="font-bold mb-4 text-xl ml-1">Applications</h2>
           {job?.applications.map((application) => {
             return (
-              <ApplicationCard key={application.id} application={application} />
+              <ApplicationCard 
+                key={application.id} 
+                application={application} 
+                onStatusChange={fnJob}
+              />
             );
           })}
         </div>

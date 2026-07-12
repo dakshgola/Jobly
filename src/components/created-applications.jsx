@@ -32,8 +32,38 @@ const CreatedApplications = () => {
     );
   }
 
+  // Compute application metric stats
+  const stats = {
+    applied: applications?.filter((ap) => ap.status === "applied").length || 0,
+    interviewing: applications?.filter((ap) => ap.status === "interviewing").length || 0,
+    selected: applications?.filter((ap) => ap.status === "hired").length || 0,
+    rejected: applications?.filter((ap) => ap.status === "rejected").length || 0,
+  };
+
   return (
     <div className="flex flex-col gap-4">
+      {/* Metrics Dashboard */}
+      {applications?.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/30 text-center shadow-sm">
+            <span className="block text-2xl font-black text-blue-400">{stats.applied}</span>
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Applied</span>
+          </div>
+          <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/30 text-center shadow-sm">
+            <span className="block text-2xl font-black text-yellow-400">{stats.interviewing}</span>
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Interviewing</span>
+          </div>
+          <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/30 text-center shadow-sm">
+            <span className="block text-2xl font-black text-green-400">{stats.selected}</span>
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Selected</span>
+          </div>
+          <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[#0B0F14]/30 text-center shadow-sm">
+            <span className="block text-2xl font-black text-red-400">{stats.rejected}</span>
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Rejected</span>
+          </div>
+        </div>
+      )}
+
       {applications?.length > 0 ? (
         applications.map((application) => (
           <ApplicationCard
