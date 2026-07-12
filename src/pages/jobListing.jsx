@@ -56,6 +56,33 @@ const JobListing = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, user, isCandidate]);
 
+  const {
+    data: companies,
+    fn: fnCompanies,
+  } = useFetch(getCompanies);
+
+  const {
+    loading: loadingJobs,
+    data: jobs,
+    fn: fnJobs,
+  } = useFetch(getJobs, {
+    location,
+    company_id,
+    searchQuery,
+  });
+
+  useEffect(() => {
+    if (isLoaded) {
+      fnCompanies();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) fnJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, location, company_id, searchQuery]);
+
   const handleGetRecommendations = async () => {
     if (!jobs?.length) return;
     setIsRecommending(true);
@@ -89,33 +116,6 @@ const JobListing = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, profileData, jobs]);
-
-  const {
-    data: companies,
-    fn: fnCompanies,
-  } = useFetch(getCompanies);
-
-  const {
-    loading: loadingJobs,
-    data: jobs,
-    fn: fnJobs,
-  } = useFetch(getJobs, {
-    location,
-    company_id,
-    searchQuery,
-  });
-
-  useEffect(() => {
-    if (isLoaded) {
-      fnCompanies();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) fnJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, location, company_id, searchQuery]);
 
   const handleSearch = (e) => {
     e.preventDefault();
