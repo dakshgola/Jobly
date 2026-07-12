@@ -432,7 +432,7 @@ const JobListing = () => {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
               {jobs
-                ?.filter(job => job.isOpen)
+                ?.filter(job => job.isOpen !== false)
                 .map(job => {
                   const match = rankings.find(r => String(r.id) === String(job.id));
                   const score = match ? match.score : 0;

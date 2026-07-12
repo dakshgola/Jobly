@@ -33,7 +33,7 @@ export const getJobMatchRankings = async (jobs, profile) => {
     });
 
     const jobsContext = jobs.map(j => 
-      `ID: ${j.id} | Title: ${j.title} | Location: ${j.location} | Description: ${j.description} | Requirements: ${j.requirements}`
+      `ID: ${j.id} | Title: ${j.title} | Location: ${j.location} | Description: ${j.description}${j.requirements ? ` | Requirements: ${j.requirements}` : ""}`
     ).join("\n---\n");
 
     const prompt = `
