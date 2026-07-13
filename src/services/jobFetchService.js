@@ -15,13 +15,13 @@ export async function fetchJSearchJobs(query, location) {
 
   // Combine query and location for Google-for-jobs style search query
   const searchTerms = location ? `${query} in ${location}` : query;
-  const url = `https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(searchTerms)}&num_pages=1`;
+  const url = `https://jsearch.p.rapidapi.com/search-v2?query=${encodeURIComponent(searchTerms)}&page=1&num_pages=1`;
 
   const response = await fetch(url, {
     method: "GET",
     headers: {
-      "x-rapidapi-key": apiKey,
-      "x-rapidapi-host": "jsearch.p.rapidapi.com",
+      "X-RapidAPI-Key": apiKey,
+      "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
     },
   });
 
@@ -31,7 +31,7 @@ export async function fetchJSearchJobs(query, location) {
   }
 
   const result = await response.json();
-  const rawJobs = result.data || [];
+  const rawJobs = result.data?.jobs || [];
 
   return rawJobs.map((job) => {
     // Normalizing location
