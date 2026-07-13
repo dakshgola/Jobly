@@ -49,7 +49,7 @@ const LandingPage = () => {
       >
         <p className="text-sm sm:text-base text-blue-400 font-medium tracking-wide uppercase mb-6 flex items-center gap-2">
           <Sparkles className="w-4 h-4" />
-          Discover jobs. Hire talent.
+          AI-Powered Job Search Assistant
         </p>
 
         <h1 className="text-center font-display text-[var(--text-primary)] mb-6 max-w-4xl mx-auto">
@@ -61,8 +61,8 @@ const LandingPage = () => {
           </span>
         </h1>
 
-        <p className="mt-4 text-[var(--text-secondary)] text-base sm:text-lg lg:text-xl max-w-xl mx-auto mb-10 leading-relaxed px-4">
-          A modern job platform to connect candidates with top companies.
+        <p className="mt-4 text-[var(--text-secondary)] text-base sm:text-lg lg:text-xl max-w-2xl mx-auto mb-10 leading-relaxed px-4">
+          An AI-powered job search assistant that parses resumes, matches candidates to live job listings, and tracks applications end-to-end.
         </p>
 
         <div className="flex flex-col items-center gap-4 w-full">
@@ -77,25 +77,7 @@ const LandingPage = () => {
               </Button>
             </Link>
 
-            {role === "recruiter" && (
-              <Link to="/post-job" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto glass-card text-[var(--text-primary)] font-medium px-6 sm:px-8 py-6 rounded-xl border border-[var(--border-color)] hover:bg-[#1A212D] shadow-sm transition-transform hover:scale-[1.02]"
-                >
-                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  Post a Job
-                </Button>
-              </Link>
-            )}
           </div>
-
-          {role === "candidate" && (
-            <p className="text-sm text-[var(--text-secondary)] mt-4 opacity-80">
-              Want to hire? Switch to a recruiter account.
-            </p>
-          )}
         </div>
       </motion.section>
 
@@ -179,8 +161,8 @@ const LandingPage = () => {
             </div>
             <span className="text-xs font-semibold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">Full Control</span>
           </div>
-          <h3 className="font-bold text-2xl mb-3 text-[var(--text-primary)]">Recruiter Dashboard</h3>
-          <p className="text-[var(--text-secondary)] leading-relaxed text-lg">Post jobs, manage listings, and track applications with a powerful dashboard designed for efficient hiring workflows.</p>
+          <h3 className="font-bold text-2xl mb-3 text-[var(--text-primary)]">Application Tracking</h3>
+          <p className="text-[var(--text-secondary)] leading-relaxed text-lg">Log application statuses, review match metrics, and track your interviews and offers in one organized candidate dashboard.</p>
         </motion.div>
       </motion.section>
 
@@ -198,8 +180,8 @@ const LandingPage = () => {
               <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--text-primary)] font-bold text-[#0B0F14] flex items-center justify-center text-sm shadow-lg">1</span>
               <Search className="w-8 h-8 text-[var(--text-primary)]" />
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Browse Jobs</h3>
-            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Explore job listings using powerful search and filters to find roles that match your skills and interests.</p>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Upload Resume</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Upload your resume to extract key details, build your candidate profile, and score your profile completeness.</p>
           </motion.div>
 
           <motion.div variants={fadeInUp} className="flex flex-col items-center text-center group">
@@ -207,8 +189,8 @@ const LandingPage = () => {
               <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-[var(--text-primary)] font-bold text-[#0B0F14] flex items-center justify-center text-sm shadow-lg">2</span>
               <Shield className="w-8 h-8 text-[var(--text-primary)]" />
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Apply Easily</h3>
-            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Submit applications instantly and keep track of saved jobs and opportunities in one place.</p>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">AI Match Scores</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Receive live JSearch listings ranked by Gemini AI matching scores, complete with explanations of why you fit the role.</p>
           </motion.div>
 
           <motion.div variants={fadeInUp} className="flex flex-col items-center text-center group">
@@ -216,8 +198,8 @@ const LandingPage = () => {
               <span className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white font-bold text-blue-600 flex items-center justify-center text-sm shadow-lg shadow-blue-500/20">3</span>
               <CheckCircle2 className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Get Hired</h3>
-            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Connect with recruiters, get shortlisted, and land your next opportunity with a seamless hiring experience.</p>
+            <h3 className="text-2xl font-bold mb-3 text-[var(--text-primary)]">Apply & Track</h3>
+            <p className="text-[var(--text-secondary)] leading-relaxed max-w-sm text-lg">Apply to external postings with redirect links, and track your application status from applied to selected.</p>
           </motion.div>
         </div>
       </motion.section>
